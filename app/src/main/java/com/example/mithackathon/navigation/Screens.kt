@@ -1,9 +1,14 @@
 package com.example.mithackathon.navigation
 
 enum class AppScreens {
-    AuthScreen,
-    HomeScreen,
+    SignUpScreen,
+    SignInScreen,
     CreateEventScreen,
     ScanQrScreen,
-    EventDetailsScreen
+    EventDetailsScreen,
+    MainScreen,
+    EventsListScreen,
+    ProfileScreen,
+    ClubsListScreen,
+    ClubDashBoardScreen
 }

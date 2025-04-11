@@ -10,7 +10,7 @@ data class Event(
     val tag: String = "",
     val registrationLink: String = "",
     val registrationFee: String = "",
-    val posterUrl: String? = null,
+    val imageUrl: String? = null,
     val organizerId: String = "",
     val id: String = "" ,// optional, if needed
     val attendees: List<String> = emptyList()

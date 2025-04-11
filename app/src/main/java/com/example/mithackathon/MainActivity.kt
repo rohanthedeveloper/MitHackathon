@@ -58,42 +58,10 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colorScheme.background
                     ) {
-                        Scaffold(
-                            bottomBar = {
-                                NavigationBar {
-                                    val currentDestination = navController
-                                        .currentBackStackEntryAsState().value?.destination
-
-                                    NavigationBarItem(
-                                        icon = { Icon(Icons.Default.List, contentDescription = "Events") },
-                                        label = { Text("Events") },
-                                        selected = currentDestination?.route == AppScreens.HomeScreen.name,
-                                        onClick = {
-                                            navController.navigate(AppScreens.HomeScreen.name) {
-                                                popUpTo(AppScreens.HomeScreen.name) { inclusive = true }
-                                            }
-                                        }
-                                    )
-
-                                    NavigationBarItem(
-                                        icon = { Icon(Icons.Default.QrCodeScanner, contentDescription = "Scan QR") },
-                                        label = { Text("Scan QR") },
-                                        selected = currentDestination?.route == AppScreens.ScanQrScreen.name,
-                                        onClick = {
-                                            navController.navigate(AppScreens.ScanQrScreen.name)
-                                        }
-                                    )
-                                }
-                            }
-                        ) { paddingValues ->
-                            Box(modifier = Modifier.padding(paddingValues)) {
-                                AppNavigation(navController)
-                            }
-                        }
+                        AppNavigation(navController)
                     }
                 }
             }
         }
     }
 }
-

@@ -75,7 +75,7 @@ class EventViewModel(private val repository: FirebaseRepository) : ViewModel() {
                     tag = tag,
                     registrationLink = registrationLink,
                     registrationFee = registrationFee,
-                    posterUrl = posterUrl,
+                    imageUrl = posterUrl,
                     organizerId = userId
                 )
 

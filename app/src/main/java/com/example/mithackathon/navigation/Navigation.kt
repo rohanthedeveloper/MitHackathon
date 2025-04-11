@@ -11,20 +11,41 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.mithackathon.data.Repositories.FirebaseRepository
 import com.example.mithackathon.presentation.AttendanceViewModel
-import com.example.mithackathon.presentation.AuthScreen
+import com.example.mithackathon.presentation.Auth.AuthViewModel
+import com.example.mithackathon.presentation.Auth.LoginScreen
+import com.example.mithackathon.presentation.Auth.SignupScreen
+import com.example.mithackathon.presentation.ClubDashboard.MyClubScreen
+import com.example.mithackathon.presentation.ClubsList.ClubsListScreen
 import com.example.mithackathon.presentation.CreateEventScreen
 import com.example.mithackathon.presentation.EventDetailsScreen
 import com.example.mithackathon.presentation.EventViewModel
 import com.example.mithackathon.presentation.EventsListScreen
 import com.example.mithackathon.presentation.QRScannerScreen
+import com.example.mithackathon.presentation.feed.FeedViewModel
+import com.example.mithackathon.presentation.feed.MainFeedScreen
 
 @Composable
 fun AppNavigation(navController: NavHostController){
-    NavHost(navController = navController , startDestination = AppScreens.AuthScreen.name){
-        composable(AppScreens.AuthScreen.name) {
-            AuthScreen(navController = navController)
+    NavHost(navController = navController , startDestination = AppScreens.SignInScreen.name){
+        composable(AppScreens.SignInScreen.name) {
+            val authViewModel = viewModel { AuthViewModel() }
+            LoginScreen(navController = navController , viewModel = authViewModel)
         }
-        composable(AppScreens.HomeScreen.name) {
+        composable(AppScreens.SignUpScreen.name) {
+            val authViewModel = viewModel { AuthViewModel() }
+            SignupScreen(viewModel = authViewModel , navController = navController)
+        }
+        composable(AppScreens.MainScreen.name) {
+            val feedViewModel = viewModel { FeedViewModel() }
+            MainFeedScreen(viewModel = feedViewModel , navController)
+        }
+        composable(AppScreens.ClubsListScreen.name) {
+            ClubsListScreen()
+        }
+        composable(AppScreens.ClubDashBoardScreen.name) {
+            MyClubScreen(navController)
+        }
+        composable(AppScreens.EventsListScreen.name) {
             val repository = remember { FirebaseRepository() }
             val eventViewModel = viewModel { EventViewModel(repository) }
 
@@ -51,7 +72,7 @@ fun AppNavigation(navController: NavHostController){
                 viewModel = attendanceViewModel,
                 onScanComplete = {
                     // Navigate to Events List or any other screen on scan complete
-                    navController.navigate(AppScreens.HomeScreen.name) {
+                    navController.navigate(AppScreens.EventsListScreen.name) {
                         popUpTo(AppScreens.ScanQrScreen.name) { inclusive = true }
                     }
                 }
@@ -64,7 +85,7 @@ fun AppNavigation(navController: NavHostController){
             CreateEventScreen(
                 viewModel = viewModel,
                 onEventCreated = {
-                    navController.navigate(AppScreens.HomeScreen.name) {
+                    navController.navigate(AppScreens.EventsListScreen.name) {
                         popUpTo(AppScreens.CreateEventScreen.name) { inclusive = true }
                     }
                 }
