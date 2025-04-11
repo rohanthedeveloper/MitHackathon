@@ -1,5 +1,6 @@
 package com.example.mithackathon.presentation
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mithackathon.data.Repositories.FirebaseRepository
@@ -15,8 +16,10 @@ import com.example.mithackathon.utils.QRCodeUtils
 import kotlinx.coroutines.launch
 import android.graphics.Bitmap
 import android.net.Uri
+import com.example.mithackathon.claudinary.CloudinaryHelper
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.tasks.await
 
 class EventViewModel(private val repository: FirebaseRepository) : ViewModel() {
@@ -42,6 +45,7 @@ class EventViewModel(private val repository: FirebaseRepository) : ViewModel() {
     val error: StateFlow<String?> = _error
 
     fun createEvent(
+        context: Context,
         title: String,
         description: String,
         eventDate: String,
@@ -57,7 +61,6 @@ class EventViewModel(private val repository: FirebaseRepository) : ViewModel() {
             _isLoading.value = true
             _error.value = null
 
-
             val userId = FirebaseAuth.getInstance().currentUser?.uid
             if (userId == null) {
                 _error.value = "User not authenticated"
@@ -66,9 +69,18 @@ class EventViewModel(private val repository: FirebaseRepository) : ViewModel() {
             }
 
             try {
-                val posterUrl = posterUri?.let { uri ->
-                    repository.uploadImageToFirebaseStorage(uri)
-                } ?: ""
+                var posterUrl = ""
+
+                if (posterUri != null) {
+                    val file = CloudinaryHelper.uriToFile(context, posterUri)
+                    if (file != null) {
+                        val deferredUrl = CompletableDeferred<String?>()
+                        CloudinaryHelper.uploadToCloudinary(file) { url ->
+                            deferredUrl.complete(url)
+                        }
+                        posterUrl = deferredUrl.await() ?: ""
+                    }
+                }
 
                 val newEvent = Event(
                     name = title,
@@ -102,6 +114,7 @@ class EventViewModel(private val repository: FirebaseRepository) : ViewModel() {
             _isLoading.value = false
         }
     }
+
 
     fun loadEvent(eventId: String) {
         viewModelScope.launch {
