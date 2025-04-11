@@ -15,18 +15,28 @@ import com.example.mithackathon.presentation.Auth.AuthViewModel
 import com.example.mithackathon.presentation.Auth.LoginScreen
 import com.example.mithackathon.presentation.Auth.SignupScreen
 import com.example.mithackathon.presentation.ClubDashboard.MyClubScreen
+import com.example.mithackathon.presentation.ClubsList.ClubViewModel
 import com.example.mithackathon.presentation.ClubsList.ClubsListScreen
 import com.example.mithackathon.presentation.CreateEventScreen
+import com.example.mithackathon.presentation.EventDetails.EventDetailViewModel
+import com.example.mithackathon.presentation.EventDetails.EventDetailsScreenU
 import com.example.mithackathon.presentation.EventDetailsScreen
 import com.example.mithackathon.presentation.EventViewModel
 import com.example.mithackathon.presentation.EventsListScreen
+import com.example.mithackathon.presentation.Profile.EditProfileScreen
+import com.example.mithackathon.presentation.Profile.UserProfileScreen
 import com.example.mithackathon.presentation.QRScannerScreen
 import com.example.mithackathon.presentation.feed.FeedViewModel
 import com.example.mithackathon.presentation.feed.MainFeedScreen
+import com.example.mithackathon.presentation.splash.SplashScreen
 
 @Composable
 fun AppNavigation(navController: NavHostController){
-    NavHost(navController = navController , startDestination = AppScreens.SignInScreen.name){
+    NavHost(navController = navController , startDestination = AppScreens.SplashScreen.name){
+        composable(AppScreens.SplashScreen.name) {
+            val authViewModel = viewModel { AuthViewModel() }
+            SplashScreen(navController )
+        }
         composable(AppScreens.SignInScreen.name) {
             val authViewModel = viewModel { AuthViewModel() }
             LoginScreen(navController = navController , viewModel = authViewModel)
@@ -40,10 +50,19 @@ fun AppNavigation(navController: NavHostController){
             MainFeedScreen(viewModel = feedViewModel , navController)
         }
         composable(AppScreens.ClubsListScreen.name) {
-            ClubsListScreen()
+            val viewModel = viewModel { ClubViewModel() }
+            ClubsListScreen(navController = navController , viewModel = viewModel)
         }
         composable(AppScreens.ClubDashBoardScreen.name) {
             MyClubScreen(navController)
+        }
+        composable("${AppScreens.EventDetailsScreenU.name}/{eventId}"){backStackEntry ->
+            val eventId = backStackEntry.arguments?.getString("eventId") ?: ""
+            val eventDetailUViewModel = viewModel { EventDetailViewModel(eventId) }
+            EventDetailsScreenU(navController = navController , viewModel = eventDetailUViewModel)
+        }
+        composable(AppScreens.EditProfileScreen.name) {
+            EditProfileScreen(navController)
         }
         composable(AppScreens.EventsListScreen.name) {
             val repository = remember { FirebaseRepository() }
@@ -56,6 +75,9 @@ fun AppNavigation(navController: NavHostController){
                     navController.navigate("${AppScreens.EventDetailsScreen.name}/$eventId")
                 }
             )
+        }
+        composable(AppScreens.UserProfileScreen.name) {
+            UserProfileScreen(navController = navController)
         }
         composable("${AppScreens.EventDetailsScreen.name}/{eventId}") { backStackEntry ->
             val eventId = backStackEntry.arguments?.getString("eventId") ?: ""

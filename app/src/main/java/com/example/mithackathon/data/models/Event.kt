@@ -10,8 +10,13 @@ data class Event(
     val tag: String = "",
     val registrationLink: String = "",
     val registrationFee: String = "",
-    val imageUrl: String? = null,
+    val imageUrl: String = "",
     val organizerId: String = "",
     val id: String = "" ,// optional, if needed
-    val attendees: List<String> = emptyList()
+    val attendees: List<String> = emptyList(),
+    val clubName: String = "",     // fetched from SharedPrefs
+    val clubUid: String = "",
+    val type: String = "",
+    val startDate: String = "",
+    val endDate: String = "",
 )

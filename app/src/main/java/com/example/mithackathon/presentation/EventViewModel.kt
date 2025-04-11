@@ -15,8 +15,13 @@ import com.example.mithackathon.utils.QRCodeUtils
 import kotlinx.coroutines.launch
 import android.graphics.Bitmap
 import android.net.Uri
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.tasks.await
 
 class EventViewModel(private val repository: FirebaseRepository) : ViewModel() {
+    private val _registrations = MutableStateFlow<List<User>>(emptyList())
+    val registrations: StateFlow<List<User>> = _registrations
 
     private val _events = MutableStateFlow<List<Event>>(emptyList())
     val events: StateFlow<List<Event>> = _events
@@ -148,5 +153,52 @@ class EventViewModel(private val repository: FirebaseRepository) : ViewModel() {
         val deepLink = QRCodeUtils.generateDeepLink(eventId)
         val qrCode = QRCodeUtils.generateQRCode(deepLink, 500)
         _qrCodeBitmap.value = qrCode
+    }
+    fun loadEventRegistrations(eventId: String) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            _error.value = null
+
+            val result = try {
+                val usersSnapshot = Firebase.firestore
+                    .collection("event_registrations")
+                    .document(eventId)
+                    .collection("users")
+                    .get()
+                    .await()
+
+                val registrations = usersSnapshot.documents.mapNotNull { doc ->
+                    val name = doc.getString("name")
+                    val email = doc.getString("email")
+                    val id = doc.id
+                    if (name != null && email != null) {
+                        User(id = id, name = name, email = email)
+                    } else null
+                }
+
+                Result.success(registrations)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+
+            result.onSuccess {
+                _registrations.value = it
+            }.onFailure {
+                _error.value = it.message
+            }
+
+            _isLoading.value = false
+        }
+    }
+
+
+
+
+
+    fun deleteEvent(eventId: String) {
+        viewModelScope.launch {
+            repository.deleteEvent(eventId)
+                .onFailure { _error.value = it.message }
+        }
     }
 }

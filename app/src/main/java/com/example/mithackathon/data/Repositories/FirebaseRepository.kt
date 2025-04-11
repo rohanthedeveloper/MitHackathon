@@ -117,6 +117,32 @@ class FirebaseRepository {
             Result.failure(e)
         }
     }
+    suspend fun getEventRegistrations(eventId: String): Result<List<User>> {
+        return try {
+            val snapshot = db.collection("rsvps")
+                .whereEqualTo("eventId", eventId)
+                .get().await()
+
+            val userIds = snapshot.documents.mapNotNull { it.getString("userId") }
+
+            val users = userIds.mapNotNull { userId ->
+                val userSnapshot = usersCollection.document(userId).get().await()
+                userSnapshot.toObject(User::class.java)
+            }
+
+            Result.success(users)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+    suspend fun deleteEvent(eventId: String): Result<Unit> {
+        return try {
+            eventsCollection.document(eventId).delete().await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
     suspend fun uploadImageToFirebaseStorage(uri: Uri): String = withContext(Dispatchers.IO) {
         try {
             val storageRef = FirebaseStorage.getInstance().reference

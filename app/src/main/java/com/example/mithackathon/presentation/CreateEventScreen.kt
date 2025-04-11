@@ -124,9 +124,9 @@ fun CreateEventScreen(
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(8.dp))
-//        OutlinedButton(onClick = { imagePickerLauncher.launch("image/*") }) {
-//            Text("Select Poster Image")
-//        }
+        OutlinedButton(onClick = { imagePickerLauncher.launch("image/*") }) {
+            Text("Select Poster Image")
+        }
         Spacer(modifier = Modifier.height(8.dp))
         OutlinedButton(onClick = { eventDatePickerDialog.show() }) {
             Text("Pick Event Date: $eventDate")
