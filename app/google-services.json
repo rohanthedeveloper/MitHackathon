@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "314688259507",
+    "project_id": "mlkitqrattendance",
+    "storage_bucket": "mlkitqrattendance.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:314688259507:android:4957e030b1b29c1f3ef7c6",
+        "android_client_info": {
+          "package_name": "com.example.mithackathon"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD9gZcRyw9IjcoysHa2AvSa3WLQa5NDLCQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
