@@ -2,9 +2,9 @@
 
 ### 🏢 Common Screens
 <p float="left">
-  <img src=screenshots/user/clubconnect-splash-screen.jpg" width="45%" />
-  <img src="screenshots/user/clubconnect-login-screen.jpg" width="45%" />
-  <img src="screenshots/user/clubconnect-signup-screen.jpg" width="45%" />
+  <img src=screenshots/user/clubconnect-splash-screen.jpg" width="18%" />
+  <img src="screenshots/user/clubconnect-login-screen.jpg" width="18%" />
+  <img src="screenshots/user/clubconnect-signup-screen.jpg" width="18%" />
 </p>
 
 #### User Side Screens
