@@ -9,12 +9,12 @@
 
 #### User Side Screens
   <p float="left">
-  <img src=screenshots/user/clubconnect-home-screen.jpg" width="45%" />
-  <img src="screenshots/user/clubconnect-clubslist-screen.jpg" width="45%" />
-  <img src="screenshots/user/clubconnect-eventdetails-screen.jpg" width="45%" />
-  <img src=screenshots/user/clubconnect-eventdetails-screen2.jpg" width="45%" />
-  <img src="screenshots/user/clubconnect-scanqr-screen.jpg" width="45%" />
-  <img src="screenshots/user/clubconnect-userprofile-screen.jpg" width="45%" />
+  <img src=screenshots/user/clubconnect-home-screen.jpg" width="18%" />
+  <img src="screenshots/user/clubconnect-clubslist-screen.jpg" width="18%" />
+  <img src="screenshots/user/clubconnect-eventdetails-screen.jpg" width="18%" />
+  <img src=screenshots/user/clubconnect-eventdetails-screen2.jpg" width="18%" />
+  <img src="screenshots/user/clubconnect-scanqr-screen.jpg" width="18%" />
+  <img src="screenshots/user/clubconnect-userprofile-screen.jpg" width="18%" />
 </p>
 
 ### 🏢 Club Side Screens
