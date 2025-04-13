@@ -19,10 +19,10 @@
 
 ### 🏢 Club Side Screens
  <p float="left">
-  <img src=screenshots/user/clubconnect-clubdashboard-screen.jpg" width="45%" />
-  <img src="screenshots/user/clubconnect-addevent-screen.jpg" width="45%" />
-  <img src="screenshots/user/clubconnect-eventslist-screen.jpg" width="45%" />
-  <img src=screenshots/user/clubconnect-eventdetails-screen2.jpg" width="45%" />
+  <img src=screenshots/user/clubconnect-clubdashboard-screen.jpg" width="18%" />
+  <img src="screenshots/user/clubconnect-addevent-screen.jpg" width="18%" />
+  <img src="screenshots/user/clubconnect-eventslist-screen.jpg" width="18%" />
+  <img src=screenshots/user/clubconnect-eventdetails-screen2.jpg" width="18%" />
 </p>
 
 
