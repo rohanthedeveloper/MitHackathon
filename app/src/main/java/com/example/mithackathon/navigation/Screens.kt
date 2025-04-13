@@ -13,5 +13,6 @@ enum class AppScreens {
     ClubDashBoardScreen,
     EventDetailsScreenU,
     SplashScreen,
-    EditProfileScreen
+    EditProfileScreen,
+    ClubMembersScreen
 }

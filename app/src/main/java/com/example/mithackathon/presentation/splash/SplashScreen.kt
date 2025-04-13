@@ -59,7 +59,7 @@ fun SplashScreen(navController: NavController) {
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = "Your App Name",
+            text = "ClubConnect",
             fontSize = 28.sp,
             fontWeight = FontWeight.Bold,
             color = Color(0xFF3F51B5)

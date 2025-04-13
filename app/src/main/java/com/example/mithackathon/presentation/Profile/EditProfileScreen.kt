@@ -106,7 +106,7 @@ fun EditProfileScreen(navController: NavController) {
                     color = Color(0xFF2196F3),
                     fontSize = 14.sp,
                     modifier = Modifier.clickable {
-                        imagePickerLauncher.launch("profile_img/*")
+                        imagePickerLauncher.launch("images/*")
                     }
                 )
             }

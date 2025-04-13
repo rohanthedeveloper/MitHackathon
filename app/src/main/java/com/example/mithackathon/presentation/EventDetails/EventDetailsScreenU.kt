@@ -72,7 +72,7 @@ fun EventDetailsScreenU(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(200.dp)
+                        .height(300.dp)
                         .background(Color.LightGray)
                 ) {
                     if (event.imageUrl.isNotEmpty()) {
@@ -84,7 +84,6 @@ fun EventDetailsScreenU(
                             ),
                             contentDescription = "Event poster",
                             modifier = Modifier.fillMaxSize(),
-                            contentScale = ContentScale.Crop
                         )
                     } else {
                         // Placeholder if no image
@@ -124,14 +123,14 @@ fun EventDetailsScreenU(
                     Spacer(modifier = Modifier.height(16.dp))
 
                     // Event Type Badge
-                    if (event.type.isNotEmpty()) {
+                    if (event.tag.isNotEmpty()) {
                         Surface(
                             modifier = Modifier.wrapContentSize(),
                             shape = RoundedCornerShape(16.dp),
                             color = MaterialTheme.colorScheme.primaryContainer
                         ) {
                             Text(
-                                text = event.type,
+                                text = event.tag,
                                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp),
                                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                                 fontSize = 14.sp
@@ -156,7 +155,7 @@ fun EventDetailsScreenU(
                     }
 
                     // Date
-                    if (event.startDate.isNotEmpty()) {
+                    if (event.registrationOpen.isNotEmpty()) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(
                                 Icons.Default.CalendarToday,
@@ -165,10 +164,10 @@ fun EventDetailsScreenU(
                             )
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(
-                                if (event.endDate.isNotEmpty()) {
-                                    "${event.startDate} to ${event.endDate}"
+                                if (event.registrationClose.isNotEmpty()) {
+                                    "${event.registrationClose} to ${event.registrationClose}"
                                 } else {
-                                    event.startDate
+                                    event.registrationOpen
                                 }
                             )
                         }

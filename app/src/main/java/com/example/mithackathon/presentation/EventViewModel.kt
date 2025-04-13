@@ -21,6 +21,135 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.tasks.await
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.Dispatcher
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.Response
+import org.json.JSONException
+import org.json.JSONObject
+import java.io.File
+import java.io.IOException
+
+//class AddEventViewModel : ViewModel() {
+//    private val _qrCodeBitmap = MutableStateFlow<Bitmap?>(null)
+//   val qrCodeBitmap: StateFlow<Bitmap?> = _qrCodeBitmap
+//
+//    private val _registrations = MutableStateFlow<List<User>>(emptyList())
+//        val registrations: StateFlow<List<User>> = _registrations
+//
+//    private val _events = MutableStateFlow<List<Event>>(emptyList())
+//    val events: StateFlow<List<Event>> = _events
+//
+//    private val _currentEvent = MutableStateFlow<Event?>(null)
+//    val currentEvent: StateFlow<Event?> = _currentEvent
+//
+//
+//    private val _attendees = MutableStateFlow<List<User>>(emptyList())
+//    val attendees: StateFlow<List<User>> = _attendees
+//
+//    private val _isLoading = MutableStateFlow(false)
+//    val isLoading: StateFlow<Boolean> = _isLoading
+//
+//    private val _error = MutableStateFlow<String?>(null)
+//    val error: StateFlow<String?> = _error
+//    fun uploadEvent(event: Event, onsuccess:(Boolean, String?)-> Unit){
+//
+//
+//        viewModelScope.launch(Dispatchers.IO){
+//            val docref =Firebase.firestore.collection("events")
+//                .document()
+//            val eventWithID = event.copy(id=docref.id)
+//            Log.d("id_check",docref.id)
+//
+//            //mapping
+//            val eventMap = hashMapOf(
+//                "id" to eventWithID.id,
+//                "name" to event.name,
+//                "description" to event.description,
+//                "type" to event.type,
+//                "location" to event.location,
+//                "startDate" to event.startDate,
+//                "endDate" to event.endDate,
+//                "registrationLink" to event.registrationLink,
+//                "registrationFee" to event.registrationFee,
+//                "clubName" to event.clubName,
+//                "clubUid" to event.clubUid,
+//                "imageUrl" to event.imageUrl,
+//                "timestamp" to System.currentTimeMillis() // Optional for sorting
+//            )
+//
+//            docref.set(eventMap)
+//                .addOnSuccessListener { task ->
+//                    onsuccess(true,null)
+//                }
+//                .addOnFailureListener { task ->
+//                    onsuccess(false,task.message)
+//                }
+//        }
+//    }
+//    fun uploadToCloudinary(file: File, context: Context, onUploaded: (String?) -> Unit) {
+//        val requestBody = MultipartBody.Builder()
+//            .setType(MultipartBody.FORM)
+//            .addFormDataPart("file", file.name, file.asRequestBody("image/*".toMediaTypeOrNull()))
+//            .addFormDataPart("upload_preset", "clubevents_image")
+//            .build()
+//
+//        val request = Request.Builder()
+//            .url("https://api.cloudinary.com/v1_1/dzzglagqm/image/upload")
+//            .post(requestBody)
+//            .build()
+//
+//        OkHttpClient().newCall(request).enqueue(object : Callback {
+//            override fun onFailure(call: Call, e: IOException) {
+//                e.printStackTrace()
+//                onUploaded(null)
+//            }
+//
+//            override fun onResponse(call: Call, response: Response) {
+//                val responseBody = response.body?.string()
+//
+//                if (response.isSuccessful && responseBody != null) {
+//                    try {
+//                        val json = JSONObject(responseBody)
+//
+//                        if (json.has("secure_url")) {
+//                            val url = json.getString("secure_url")
+//                            onUploaded(url)
+//                        } else {
+//                            Log.e("Cloudinary", "secure_url not found. Full response: $json")
+//                            onUploaded(null)
+//                        }
+//                    } catch (e: JSONException) {
+//                        Log.e("Cloudinary", "JSON parsing error: ${e.message}. Response: $responseBody")
+//                        onUploaded(null)
+//                    }
+//                } else {
+//                    Log.e("Cloudinary", "Upload failed. Code: ${response.code}, Body: $responseBody")
+//                    onUploaded(null)
+//                }
+//            }
+//
+//        })
+//    }
+//    fun uriToFile(context: Context, uri: Uri): File? {
+//        val inputStream = context.contentResolver.openInputStream(uri) ?: return null
+//        val file = File.createTempFile("temp_image", ".jpg", context.cacheDir)
+//        file.outputStream().use { output ->
+//            inputStream.copyTo(output)
+//        }
+//        return file
+//    }
+//
+//
+//}
+
+
+
 
 class EventViewModel(private val repository: FirebaseRepository) : ViewModel() {
     private val _registrations = MutableStateFlow<List<User>>(emptyList())
@@ -55,7 +184,8 @@ class EventViewModel(private val repository: FirebaseRepository) : ViewModel() {
         tag: String,
         registrationLink: String,
         registrationFee: String,
-        posterUri: Uri?
+        posterUri: Uri?,
+        clubname : String
     ) {
         viewModelScope.launch {
             _isLoading.value = true
@@ -93,7 +223,9 @@ class EventViewModel(private val repository: FirebaseRepository) : ViewModel() {
                     registrationLink = registrationLink,
                     registrationFee = registrationFee,
                     imageUrl = posterUrl,
-                    organizerId = userId
+                    organizerId = userId,
+                    clubName = clubname,
+                    startDate =eventDate
                 )
 
                 val eventIdResult = repository.createEvent(newEvent)

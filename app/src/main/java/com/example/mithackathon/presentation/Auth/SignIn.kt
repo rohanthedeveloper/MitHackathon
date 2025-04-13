@@ -11,8 +11,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
@@ -55,7 +57,8 @@ fun LoginScreen(viewModel: AuthViewModel,
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 24.dp),
+                .padding(horizontal = 24.dp)
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier = Modifier.height(60.dp))
@@ -63,15 +66,15 @@ fun LoginScreen(viewModel: AuthViewModel,
             // Logo Circle
             Box(
                 modifier = Modifier
-                    .size(80.dp)
+                    .size(120.dp)
                     .clip(CircleShape)
                     .background(Color.White),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "LOGO",
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold
+                    text = "ClubConnect",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
                 )
             }
 

@@ -14,15 +14,19 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.FilterList
+import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -32,40 +36,70 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.mithackathon.data.models.Club
 
-
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ClubsListScreen(viewModel: ClubViewModel , navController: NavController) {
-
+fun ClubsListScreen(viewModel: ClubViewModel, navController: NavController) {
     val clubs = viewModel.clubsList
     val isLoading = viewModel.isLoading
     val error = viewModel.errorMessage
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Column(modifier = Modifier.fillMaxSize().background(Color(0xFFF5F7FA))) {
 
-        when {
-            isLoading -> {
-                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-            }
+        // Top AppBar
+        TopAppBar(
+            title = { Text("Clubs") },
+            navigationIcon = {
+                IconButton(onClick = { navController.popBackStack() }) {
+                    Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                }
+            },
+        )
 
-            error != null -> {
-                Text(
-                    text = "Error: $error",
-                    modifier = Modifier.align(Alignment.Center),
-                    color = Color.Red
-                )
-            }
+        // Filters section
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color(0xFFE9EDF2))
+                .padding(horizontal = 16.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(Icons.Default.Tune, contentDescription = "Filters")
+            Spacer(modifier = Modifier.width(8.dp))
+            Text("Filters", style = MaterialTheme.typography.bodyMedium)
+        }
 
-            clubs.isEmpty() -> {
-                Text(
-                    text = "No clubs found.",
-                    modifier = Modifier.align(Alignment.Center)
-                )
-            }
+        // Body
+        Box(modifier = Modifier.fillMaxSize()) {
+            when {
+                isLoading -> {
+                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                }
 
-            else -> {
-                LazyColumn {
-                    items(clubs) { club ->
-                        ClubItem(club)
+                error != null -> {
+                    Text(
+                        text = "Error: $error",
+                        modifier = Modifier.align(Alignment.Center),
+                        color = Color.Red
+                    )
+                }
+
+                clubs.isEmpty() -> {
+                    Text(
+                        text = "No clubs found.",
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                }
+
+                else -> {
+                    LazyColumn(
+                        contentPadding = PaddingValues(12.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        items(clubs) { club ->
+                            ClubItem(club = club, onClick = {
+                                // Navigate to club details if needed
+                            })
+                        }
                     }
                 }
             }
@@ -74,32 +108,45 @@ fun ClubsListScreen(viewModel: ClubViewModel , navController: NavController) {
 }
 
 @Composable
-fun ClubItem(club: ClubUser) {
+fun ClubItem(club: ClubUser, onClick: () -> Unit) {
     Card(
         modifier = Modifier
-            .padding(8.dp)
-            .fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(4.dp)
+            .fillMaxWidth()
+            .clickable { onClick() },
+        shape = RoundedCornerShape(16.dp),
+        elevation = CardDefaults.cardElevation(4.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
         Row(
             modifier = Modifier
-                .padding(12.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .padding(horizontal = 16.dp, vertical = 12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            AsyncImage(
-                model = club.imageUri,
-                contentDescription = null,
-                modifier = Modifier
-                    .size(50.dp)
-                    .clip(CircleShape)
-            )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                AsyncImage(
+                    model = club.imageUri,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(CircleShape),
+                    contentScale = ContentScale.Crop
+                )
 
-            Spacer(modifier = Modifier.width(12.dp))
+                Spacer(modifier = Modifier.width(16.dp))
 
-            Column {
-                Text(text = club.name, fontWeight = FontWeight.Bold)
-                Text(text = club.email, style = MaterialTheme.typography.bodySmall)
+                Text(
+                    text = club.name,
+                    style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold)
+                )
             }
+
+            Icon(
+                imageVector = Icons.Default.KeyboardArrowRight,
+                contentDescription = "Arrow",
+                tint = Color.Black
+            )
         }
     }
 }
+

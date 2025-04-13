@@ -58,14 +58,14 @@ fun SignupScreen(viewModel: AuthViewModel , navController: NavController) {
             // Logo Circle
             Box(
                 modifier = Modifier
-                    .size(80.dp)
+                    .size(120.dp)
                     .clip(CircleShape)
                     .background(Color.White),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "LOGO",
-                    fontSize = 16.sp,
+                    text = "ClubConnect",
+                    fontSize = 14.sp,
                     fontWeight = FontWeight.Bold
                 )
             }

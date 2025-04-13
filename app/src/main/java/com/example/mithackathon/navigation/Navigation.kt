@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.mithackathon.data.Repositories.FirebaseRepository
+import com.example.mithackathon.presentation.AddMember.ClubMembersScreen
 import com.example.mithackathon.presentation.AttendanceViewModel
 import com.example.mithackathon.presentation.Auth.AuthViewModel
 import com.example.mithackathon.presentation.Auth.LoginScreen
@@ -64,6 +65,10 @@ fun AppNavigation(navController: NavHostController){
         composable(AppScreens.EditProfileScreen.name) {
             EditProfileScreen(navController)
         }
+//        composable("${AppScreens.ClubMembersScreen.name}/{userId}") { backStackEntry ->
+//            val clubId = backStackEntry.arguments?.getString("userId") ?: ""
+//            ClubMembersScreen(navController = navController , clubId = clubId)
+//        }
         composable(AppScreens.EventsListScreen.name) {
             val repository = remember { FirebaseRepository() }
             val eventViewModel = viewModel { EventViewModel(repository) }
